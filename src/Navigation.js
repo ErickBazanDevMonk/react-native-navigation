@@ -179,10 +179,6 @@ function removeSplashScreen() {
 	return platformSpecific.removeSplashScreen();
 }
 
-function setEventHandler(uniqueID, eventHandler) {
-	_allNavigatorEventHandlers[uniqueID] = eventHandler;
-}
-
 function handleDeepLink(params = {}) {
   const { link, payload } = params;
 
