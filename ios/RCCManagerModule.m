@@ -5,6 +5,7 @@
 #import "RCCViewController.h"
 #import "RCCDrawerController.h"
 #import "RCCLightBox.h"
+#import <React/RCTEventDispatcher.h>
 #import <React/RCTConvert.h>
 #import "RCCTabBarController.h"
 #import "RCCTheSideBarManagerViewController.h"
@@ -182,6 +183,10 @@ RCT_EXPORT_MODULE(RCCManager);
                                    {
                                        dispatch_async(dispatch_get_main_queue(), ^
                                                       {
+                                                          [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:@"dismissController" body:@
+                                                           {
+                                                               @"type" : @"DismissAllModal"
+                                                           }];
                                                           resolve(nil);
                                                       });
                                    }
@@ -191,6 +196,10 @@ RCT_EXPORT_MODULE(RCCManager);
     }
     else if (resolve != nil)
     {
+        [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:@"dismissController" body:@
+         {
+             @"type" : @"DismissAllModal"
+         }];
         resolve(nil);
     }
 }
@@ -418,11 +427,21 @@ RCT_EXPORT_METHOD(
         [[RCCManager sharedIntance] unregisterController:vc];
         
         [vc dismissViewControllerAnimated:![animationType isEqualToString:@"none"]
-                               completion:^(){ resolve(nil); }];
+                               completion:^(){
+                                   [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:@"dismissController" body:@
+                                    {
+                                        @"type" : @"DismissSingleModal"
+                                    }];
+                                   resolve(nil);
+                               }];
     }
     else
     {
-      resolve(nil);
+        [[[RCCManager sharedInstance] getBridge].eventDispatcher sendAppEventWithName:@"dismissController" body:@
+         {
+             @"type" : @"DismissSingleModal"
+         }];
+        resolve(nil);
     }
 }
 
