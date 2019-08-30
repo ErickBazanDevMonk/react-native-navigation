@@ -10,6 +10,16 @@ const registeredScreens = {};
 const _allNavigatorEventHandlers = {};
 const Emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
 
+Emitter.addListener('dismissController', nativeEvent => {
+  const event = {
+    ...nativeEvent,
+    type: 'DissmissController',
+  };
+  for (let i in _allNavigatorEventHandlers) {
+    _allNavigatorEventHandlers[i](event);
+  }
+});
+
 Emitter.addListener('bottomTabSelected', nativeEvent => {
 	const event = {
 		...nativeEvent,

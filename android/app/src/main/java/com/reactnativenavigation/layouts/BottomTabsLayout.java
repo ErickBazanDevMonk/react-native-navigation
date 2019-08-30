@@ -357,6 +357,9 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
 
     @Override
     public void onModalDismissed() {
+        WritableMap data = Arguments.createMap();
+        data.putString("type", "DismissModal");
+        NavigationApplication.instance.getEventEmitter().sendNavigatorEvent("dismissController", data);
         EventBus.instance.post(new ScreenChangedEvent(getCurrentScreenStack().peek().getScreenParams()));
     }
 
